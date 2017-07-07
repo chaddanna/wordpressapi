@@ -26,3 +26,55 @@ foreach ($sage_includes as $file) {
   require_once $filepath;
 }
 unset($file, $filepath);
+
+
+// CMB2 plugin
+if ( file_exists( get_template_directory() . '/inc/CMB2/init.php' ) ) {
+  require get_template_directory() . '/inc/CMB2/init.php';
+}
+// Custom metaboxes
+require get_template_directory() . '/inc/cmb2-metaboxes.php';
+
+// Custom Post Types
+function custom_post_types() {
+	// Reviews post type
+	$reviews_labels = array(
+		'add_new'            => _x( 'Add New', 'faq' ),
+		'add_new_item'       => __( 'Add New Review' ),
+		'all_items'          => __( 'All Reviews' ),
+		'edit_item'          => __( 'Edit Review' ),
+		'menu_name'          => _x( 'Reviews', 'admin menu' ),
+		'name_admin_bar'     => _x( 'Review', 'add new on admin bar' ),
+		'name'               => _x( 'Reviews', 'post type general name' ),
+		'new_item'           => __( 'New Review' ),
+		'not_found'          => __( 'No Reviews found.' ),
+		'not_found_in_trash' => __( 'No Reviews found in Trash.' ),
+		'parent_item_colon'  => __( 'Parent Review:' ),
+		'search_items'       => __( 'Search Reviews' ),
+		'singular_name'      => _x( 'Review', 'post type singular name' ),
+		'view_item'          => __( 'View Review' ),
+	);
+
+	$reviews_args = array(
+		'capability_type'    => 'post',
+		'has_archive'        => false,
+		'hierarchical'       => false,
+		'labels'             => $reviews_labels,
+		'menu_icon'          => 'dashicons-format-chat',
+		'menu_position'      => null,
+		'public'             => true,
+		'publicly_queryable' => true,
+		'query_var'          => true,
+		'rewrite'            => array( 'slug' => 'reviews' ),
+		'show_ui'            => true,
+		'show_in_menu'       => true,
+    'show_in_rest'       => true,
+    'rest_base'          => 'reviews',
+		'rest_controller_class' => 'WP_REST_Posts_Controller',
+		'supports'           => array( 'editor', 'title', ),
+	);
+
+	register_post_type( 'reviews', $reviews_args );
+}
+
+add_action( 'init', 'custom_post_types' );
