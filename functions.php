@@ -27,6 +27,15 @@ foreach ($sage_includes as $file) {
 }
 unset($file, $filepath);
 
+
+// CMB2 plugin
+if ( file_exists( get_template_directory() . '/inc/CMB2/init.php' ) ) {
+  require get_template_directory() . '/inc/CMB2/init.php';
+}
+// Custom metaboxes
+require get_template_directory() . '/inc/cmb2-metaboxes.php';
+
+// Custom Post Types
 function custom_post_types() {
 	// Reviews post type
 	$reviews_labels = array(
@@ -56,15 +65,13 @@ function custom_post_types() {
 		'public'             => true,
 		'publicly_queryable' => true,
 		'query_var'          => true,
-		'rewrite'            => array(
-			'slug' => 'reviews'
-		),
+		'rewrite'            => array( 'slug' => 'reviews' ),
 		'show_ui'            => true,
 		'show_in_menu'       => true,
-		'supports'           => array(
-			'editor',
-			'title',
-		),
+    'show_in_rest'       => true,
+    'rest_base'          => 'reviews',
+		'rest_controller_class' => 'WP_REST_Posts_Controller',
+		'supports'           => array( 'editor', 'title', ),
 	);
 
 	register_post_type( 'reviews', $reviews_args );
